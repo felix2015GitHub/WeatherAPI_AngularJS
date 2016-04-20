@@ -1,0 +1,155 @@
+.main {
+	position: absolute;
+	width: 800px;
+	height: 100%;
+}
+
+.tabbar {
+	position: relative;
+	height: 30px;
+}
+
+.typeSelect {
+    position: relative;
+    margin-top: 10px;
+    padding-left: 30px;
+    height: 30px;  
+}
+
+.content_block {
+	font-family: 'Roboto', sans-serif;
+    color: #505050;
+	position: relative;
+	height: 100%;
+}
+
+.tab {
+	float: left;
+	width: 150px;
+	height: 20px;
+	line-height: 20px;
+	font-size: 16px;
+	text-align: center;
+	cursor: pointer;
+	border: 2px solid #000;
+	border-radius: 25px;
+}
+
+.tab_selected, .tab:hover {
+	background: gray;
+	color: #fff;
+}
+
+#content_tabCurrentCity, #content_tabNextDays {
+	width: 60%;
+}
+
+.select {
+	position: relative;
+	padding-left: 30px;
+	height: 30px;
+	top: 10px;
+}
+
+.city_info {
+	position: relative;
+	padding-left: 30px;
+	height: 100%;
+}
+
+.label {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: bold;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+
+h3 {
+    display: block;
+    font-size: 1.17em;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    font-weight: bold;
+}
+
+h2 {
+    display: block;
+    font-size: 1.5em;
+    -webkit-margin-before: 0.83em;
+    -webkit-margin-after: 0.83em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    font-weight: bold;
+}
+
+img {
+    vertical-align: middle;
+}
+
+p {
+    margin: 0 0 10px;
+}
+
+.table-bordered {
+    border: 1px solid #ddd;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+table {
+    max-width: 100%;
+    background-color: transparent;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.table-striped > tbody > tr:nth-child(odd) > td {
+    background-color: #f9f9f9;
+}
+
+.table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+
+.table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
+    border: 1px solid #ddd;
+}
+
+.table-condensed > thead > tr > td, .table-condensed > tbody > tr > td, .table-condensed > tfoot > tr > td {
+    padding: 5px;
+}
+
+.table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+.label-warning {
+    background-color: #f0ad4e;
+}
+
+.label-default {
+    background-color: #999;
+}
