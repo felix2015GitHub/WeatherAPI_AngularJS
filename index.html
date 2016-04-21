@@ -1,15 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="weather">
 <head>
-<title>Weather API example use AngularJS</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="weather.css">
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+	<title>Weather API example use AngularJS</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="weather.css">
 </head>
 <body>
-<div class="main">
-	
+<div class="main" ng-controller="TabController as tab">
+	<div class="tabbar">
+		<div ng-click="showme=true" class="tab tabCity">Current City</div>
+		<div ng-click="showme=false" class="tab tabNext">Next Days</div>
+	</div>
+	<div class="content_block">
+		<div id="content_city" ng-controller="TabController as city" ng-show="showme">
+			<div class="select">
+				<select id="changeCity">
+					<option value="Taipei">Taipei</option>
+					<option value="NewYork">New York</option>
+					<option value="London">London</option>
+				</select>
+			</div>
+			<div ng-bind-html="city.cityData"></div>
+		</div>
+		<div id="content_next" ng-controller="TabController as days" ng-hide="showme">
+			<div class="select">
+				<select id="changeDays">
+					<option value="5">5 days</option>
+					<option value="7">7 days</option>
+					<option value="16">16 days</option>
+				</select>
+				<h3>Next days</h3>
+				<div ng-bind-html="days.daysData"></div>
+			</div>
+		</div>
+	</div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-sanitize.js"></script>
+<script type="text/javascript" src="app.js"></script>
 </body>
 </html>
