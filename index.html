@@ -9,11 +9,11 @@
 <body>
 <div class="main" ng-controller="TabController as tab">
 	<div class="tabbar">
-		<div ng-click="showme=true" class="tab tabCity">Current City</div>
-		<div ng-click="showme=false" class="tab tabNext">Next Days</div>
+		<div ng-click="tab.showPage('city')" ng-model="tab.tabPool.city" class="tab" ng-class="{tab_selected: tab.tabPool.city}">Current City</div>
+		<div ng-click="tab.showPage('days')" ng-model="tab.tabPool.days" class="tab" ng-class="{tab_selected: tab.tabPool.days}">Next Days</div>
 	</div>
 	<div class="content_block">
-		<div id="content_city" ng-controller="TabController as city" ng-show="showme">
+		<div id="content_city" ng-show="tab.tabPool.city">
 			<div class="select">
 				<select id="changeCity">
 					<option value="Taipei">Taipei</option>
@@ -21,9 +21,9 @@
 					<option value="London">London</option>
 				</select>
 			</div>
-			<div ng-bind-html="city.cityData"></div>
+			<div ng-bind-html="tab.cityData"></div>
 		</div>
-		<div id="content_next" ng-controller="TabController as days" ng-hide="showme">
+		<div id="content_next" ng-show="tab.tabPool.days">
 			<div class="select">
 				<select id="changeDays">
 					<option value="5">5 days</option>
@@ -31,7 +31,7 @@
 					<option value="16">16 days</option>
 				</select>
 				<h3>Next days</h3>
-				<div ng-bind-html="days.daysData"></div>
+				<div ng-bind-html="tab.daysData"></div>
 			</div>
 		</div>
 	</div>

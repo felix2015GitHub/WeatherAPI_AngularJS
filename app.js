@@ -6,6 +6,7 @@
 		var currentCity = 'London',
 			currentDays = 7,
 			defaultType = 'xml',
+            selectPage = 'days',
 			month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 		var apiURL = "http://api.openweathermap.org/data/2.5/weather?q="+currentCity+"&mode=xml&units=metric&appid=8b5e25806eda1463bbfb1ce83b50c4e9";
@@ -13,9 +14,16 @@
 		var self = this;
 		self.cityData = '';
 		self.daysData = '';
+        self.tabPool = {city: false, days:true};
 
 		getCurrentCityData(apiURL);
 		getNextDaysData(apiURLdays);
+
+        self.showPage = function(id){
+            self.tabPool[selectPage] = false;
+            self.tabPool[id] = true;
+            selectPage = id;
+        }
 
 		function getCurrentCityData(url){
 			$http({
@@ -51,33 +59,10 @@
 	        });
 	    };
 
-		self.test = function(){
-			//console.log("test");
-			//return $sce.trustAsHtml("<div>asdfghjk</div>");
-			var html = '<div>'+currentCity+'</div>';
-			return html;
-		};
-
 		self.getNodeValue = function(data, xpath){
         	var nodes = data.evaluate(xpath, data, null, XPathResult.ANY_TYPE, null);
         	return nodes.iterateNext().nodeValue;
     	};
-/*
-    	self.getCurrentCityData = function(){
-        	var apiURL = "http://api.openweathermap.org/data/2.5/weather?q="+currentCity+"&mode=xml&units=metric&appid=8b5e25806eda1463bbfb1ce83b50c4e9";
-        	var request = new XMLHttpRequest();
-        	request.open("GET", apiURL, false);
-        	request.send();
-        	//if(this.options.type=="xml"){
-            	var xml = request.responseXML;
-            	self.showCurrentCity(xml);
-	        //}else{
-	        //    var json = JSON.parse(request.responseText);
-	        //    this.showCurrentCity(json);
-	        //}
-	        //console.log(xml);
-	    };
-*/
 
 		self.showNextDays = function(data){
 	        var html="";
@@ -204,11 +189,7 @@
                 '</tr>'+
                 '</tbody>'+
                 '</table>';
-        	//$(".city_info").html(html);
-        	//console.log($sce.trustAsHtml(html));
-        	//return self.cityData;
-        	self.cityData = html;
-        	//console.log(self.cityData);       	
+        	self.cityData = html;      	
     	};
 
 	}]);
