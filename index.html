@@ -12,6 +12,11 @@
 		<div ng-click="tab.showPage('city')" ng-model="tab.tabPool.city" class="tab" ng-class="{tab_selected: tab.tabPool.city}">Current City</div>
 		<div ng-click="tab.showPage('days')" ng-model="tab.tabPool.days" class="tab" ng-class="{tab_selected: tab.tabPool.days}">Next Days</div>
 	</div>
+	<div class="typeSelect">
+		<span>Type : </span>
+		<input type="radio" name="typeSel" value="xml"></input><span>XML</span>
+		<input type="radio" name="typeSel" value="json"></input><span>JSON</span>
+	</div>
 	<div class="content_block">
 		<div id="content_city" ng-show="tab.tabPool.city">
 			<div class="select">
@@ -21,7 +26,47 @@
 					<option value="London">London</option>
 				</select>
 			</div>
+			<h3 ng-bind="tab.cityInfo"></h3>
+            <h2> <img src="images/{{tab.icon}}.png"><span ng-bind="tab.temperature"></span></h2><span ng-bind="tab.cityDesInfo"></span>
+            <p>
+            	<span id="date_m"></span>
+            	<a type="button" style="color: #D26C22;" href="#">Wrong data?</a>
+            </p>
+            <table class="table table-striped table-bordered table-condensed">
+            	<tbody>
+            		<tr>
+            			<td>Wind</td>
+            			<td>m/s <br></td>
+            		</tr>
+                	<tr>
+                		<td>Cloudiness</td>
+                		<td></td>
+                	</tr>
+                	<tr>
+                		<td>Pressure<br></td>
+                		<td>hpa</td>
+                	</tr>
+                	<tr>
+                		<td>Humidity</td>
+                		<td> %</td>
+                	</tr>
+                	<tr>
+                		<td>Sunrise</td>
+                		<td id="sunrise"></td>
+                	</tr>
+                	<tr>
+                		<td>Sunset</td>
+                		<td id="sunset"></td>
+                	</tr>
+                	<tr>
+                		<td>Geo coords</td>
+                		<td id="coord"><a href="http://openweathermap.org/Maps?zoom=12&amp;lat='+coordlat+'&amp;lon='+coordlon+'&amp;layers=B0FTTFF">[ , ]</a></td>
+                	</tr>
+                </tbody>
+            </table>
+			<!--
 			<div ng-bind-html="tab.cityData"></div>
+			-->
 		</div>
 		<div id="content_next" ng-show="tab.tabPool.days">
 			<div class="select">

@@ -9,14 +9,14 @@
             selectPage = 'days',
 			month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-		var apiURL = "http://api.openweathermap.org/data/2.5/weather?q="+currentCity+"&mode=xml&units=metric&appid=8b5e25806eda1463bbfb1ce83b50c4e9";
-		var apiURLdays = "http://api.openweathermap.org/data/2.5/forecast/daily?q="+currentCity+"&mode=xml&units=metric&cnt="+currentDays+"&appid=8b5e25806eda1463bbfb1ce83b50c4e9";
+		var apiURLcity = "http://api.openweathermap.org/data/2.5/weather?q="+currentCity+"&mode="+defaultType+"&units=metric&appid=8b5e25806eda1463bbfb1ce83b50c4e9";
+		var apiURLdays = "http://api.openweathermap.org/data/2.5/forecast/daily?q="+currentCity+"&mode="+defaultType+"&units=metric&cnt="+currentDays+"&appid=8b5e25806eda1463bbfb1ce83b50c4e9";
 		var self = this;
 		self.cityData = '';
 		self.daysData = '';
         self.tabPool = {city: false, days:true};
 
-		getCurrentCityData(apiURL);
+		getCurrentCityData(apiURLcity);
 		getNextDaysData(apiURLdays);
 
         self.showPage = function(id){
@@ -26,37 +26,23 @@
         }
 
 		function getCurrentCityData(url){
-			$http({
-		        method  : 'GET',
-	   	        url     : url,
-	   	        timeout : 10000,
-	            params  : {},  // Query Parameters (GET)
-	            transformResponse : function(data) {
-	                // string -> XML document object
-	                return $.parseXML(data);
-	            }
-	        }).success(function(data, status, headers, config) {
-	        	self.showCurrentCity(data);
-	        }).error(function(data, status, headers, config) {
-	            $window.alert('error');
-	        });
+            $http.get(url).then(function(response){
+                if(defaultType=="xml"){
+                    self.showCurrentCity($.parseXML(response.data));
+                }else{
+                    self.showCurrentCity(response.data);
+                }
+            });
 	    };
 
 	    function getNextDaysData(url){
-			$http({
-		        method  : 'GET',
-	   	        url     : url,
-	   	        timeout : 10000,
-	            params  : {},  // Query Parameters (GET)
-	            transformResponse : function(data) {
-	                // string -> XML document object
-	                return $.parseXML(data);
-	            }
-	        }).success(function(data, status, headers, config) {
-	        	self.showNextDays(data);
-	        }).error(function(data, status, headers, config) {
-	            $window.alert('error');
-	        });
+            $http.get(url).then(function(response){
+                if(defaultType=="xml"){
+                    self.showNextDays($.parseXML(response.data));
+                }else{
+                    self.showNextDays(response.data);
+                }
+            });
 	    };
 
 		self.getNodeValue = function(data, xpath){
@@ -106,43 +92,81 @@
     	self.showCurrentCity = function(data){
     		
         	var c = new Date();
-        
-            var cityName = self.getNodeValue(data, "//city/@name");
-            var country = self.getNodeValue(data, "//city/country/text()");
-            var temperature = Math.round(self.getNodeValue(data, "//temperature/@value"));
-            var icon = self.getNodeValue(data, "//weather/@icon");
-            var getCityDes = self.getNodeValue(data, "//weather/@number");
-            var cityDes;
-            switch(getCityDes.slice(0,1)){
-                case "2": cityDes = "Thunderstorm"; break;
-                case "3": cityDes = "Drizzle"; break;
-                case "5": cityDes = "Rain"; break;
-                case "6": cityDes = "Snow"; break;
-                case "8": 
-                    getCityDes=="800" ? cityDes="Clear":cityDes="Clouds";
-                    break;
-                default:
-                    var getCityDesVal = self.getNodeValue(data, "//weather/@value");
-                    var strlen = getCityDesVal.length;
-                    var firstChar = getCityDesVal.slice(0,1).toUpperCase();
-                    cityDes = firstChar+getCityDesVal.slice(1,strlen);
-                    break;
-            }
-            var speedName = self.getNodeValue(data, "//wind/speed/@name");
-            var speedVal = self.getNodeValue(data, "//wind/speed/@value");
-            var directionName = self.getNodeValue(data, "//wind/direction/@name");
-            var directionVal = self.getNodeValue(data, "//wind/direction/@value");
-            var cloudsName = self.getNodeValue(data, "//clouds/@name");
-            var pressureVal = self.getNodeValue(data, "//pressure/@value");
-            var humidityVal = self.getNodeValue(data, "//humidity/@value");
-            var getSunrise = new Date(self.getNodeValue(data, "//city/sun/@rise"));
-            var getSunset = new Date(self.getNodeValue(data, "//city/sun/@set"));
-            var sunrise = getSunrise.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
-            var sunset = getSunset.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
-            var coordlon = self.getNodeValue(data, "//city/coord/@lon");
-            var coordlat = self.getNodeValue(data, "//city/coord/@lat");
-        
 
+            if(defaultType=="xml"){
+                var cityName = self.getNodeValue(data, "//city/@name");
+                var country = self.getNodeValue(data, "//city/country/text()");
+                self.cityInfo = cityName+", "+country;
+                self.temperature = Math.round(self.getNodeValue(data, "//temperature/@value"))+"  °C";
+                self.icon = self.getNodeValue(data, "//weather/@icon");
+                self.getCityDes = self.getNodeValue(data, "//weather/@number");
+                var cityDes;
+                switch(self.getCityDes.slice(0,1)){
+                    case "2": cityDes = "Thunderstorm"; break;
+                    case "3": cityDes = "Drizzle"; break;
+                    case "5": cityDes = "Rain"; break;
+                    case "6": cityDes = "Snow"; break;
+                    case "8": 
+                        self.getCityDes=="800" ? cityDes="Clear":cityDes="Clouds";
+                        break;
+                    default:
+                        var getCityDesVal = self.getNodeValue(data, "//weather/@value");
+                        var strlen = getCityDesVal.length;
+                        var firstChar = getCityDesVal.slice(0,1).toUpperCase();
+                        cityDes = firstChar+getCityDesVal.slice(1,strlen);
+                        break;
+                }
+                self.cityDesInfo = cityDes;
+                var speedName = self.getNodeValue(data, "//wind/speed/@name");
+                var speedVal = self.getNodeValue(data, "//wind/speed/@value");
+                var directionName = self.getNodeValue(data, "//wind/direction/@name");
+                var directionVal = self.getNodeValue(data, "//wind/direction/@value");
+                var cloudsName = self.getNodeValue(data, "//clouds/@name");
+                var pressureVal = self.getNodeValue(data, "//pressure/@value");
+                var humidityVal = self.getNodeValue(data, "//humidity/@value");
+                var getSunrise = new Date(self.getNodeValue(data, "//city/sun/@rise"));
+                var getSunset = new Date(self.getNodeValue(data, "//city/sun/@set"));
+                var sunrise = getSunrise.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+                var sunset = getSunset.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+                var coordlon = self.getNodeValue(data, "//city/coord/@lon");
+                var coordlat = self.getNodeValue(data, "//city/coord/@lat");
+            }else{
+                var cityName = data.name;
+                var country = data.sys.country;
+                var temperature = Math.round(data.main.temp);
+                var icon = data.weather[0].icon;
+                var getCityDes = data.weather[0].id;
+                var cityDes;
+                switch(getCityDes.toString().slice(0,1)){
+                    case "2": cityDes="Thunderstorm"; break;
+                    case "3": cityDes="Drizzle"; break;
+                    case "5": cityDes="Rain"; break;
+                    case "6": cityDes="Snow"; break;
+                    case "8": 
+                        getCityDes=="800" ? cityDes="Clear":cityDes="Clouds";
+                        break;
+                    default:
+                        var getCityDesVal=data.weather[0].description;
+                        var strlen=getCityDesVal.length;
+                        var firstChar=getCityDesVal.slice(0,1).toUpperCase();
+                        cityDes=firstChar+getCityDesVal.slice(1,strlen);
+                        break;
+                }
+                var speedName = "---";
+                var speedVal = data.wind.speed;
+                var directionName = "---";
+                var directionVal = data.wind.deg;
+                var cloudsName = "---";
+                var pressureVal = data.main.pressure;
+                var humidityVal = data.main.humidity;
+                var getSunrise = new Date((data.sys.sunrise)*1000);
+                var getSunset = new Date((data.sys.sunset)*1000);
+                var sunrise = getSunrise.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+                var sunset = getSunset.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+                var coordlon = data.coord.lon;
+                var coordlat = data.coord.lat;
+            }
+        /*
         	var html;
         	html = '<h3>'+cityName+', '+country+'</h3>'+
                 '<h2> <img src="images/'+icon+'.png"> '+temperature+' °C</h2>'+
@@ -189,7 +213,8 @@
                 '</tr>'+
                 '</tbody>'+
                 '</table>';
-        	self.cityData = html;      	
+        	self.cityData = html;  
+            */    	
     	};
 
 	}]);
