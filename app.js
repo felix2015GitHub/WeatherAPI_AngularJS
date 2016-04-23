@@ -5,7 +5,7 @@
 	app.controller('TabController', ['$http', function($http){
 		var currentCity = 'London',
 			currentDays = 7,
-			defaultType = 'xml',
+			defaultType = 'json',
             selectPage = 'days',
 			month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -92,6 +92,12 @@
     	self.showCurrentCity = function(data){
     		
         	var c = new Date();
+            self.date_m = "get on "+
+                c.getFullYear()+'.'+
+                (((c.getMonth()+1)<10)?("0"+(c.getMonth()+1)):(c.getMonth()+1))+'.'+
+                ((c.getDate()<10)?("0"+c.getDate()):c.getDate())+' '+
+                ((c.getHours()<10)?("0"+c.getHours()):c.getHours())+":"+
+                ((c.getMinutes()<10)?("0"+c.getMinutes()):c.getMinutes());
 
             if(defaultType=="xml"){
                 var cityName = self.getNodeValue(data, "//city/@name");
@@ -119,31 +125,37 @@
                 self.cityDesInfo = cityDes;
                 var speedName = self.getNodeValue(data, "//wind/speed/@name");
                 var speedVal = self.getNodeValue(data, "//wind/speed/@value");
+                self.windVal = speedName+" "+speedVal;
                 var directionName = self.getNodeValue(data, "//wind/direction/@name");
                 var directionVal = self.getNodeValue(data, "//wind/direction/@value");
-                var cloudsName = self.getNodeValue(data, "//clouds/@name");
+                self.windDirection = directionName+" ("+directionVal+" )";
+                self.cloudsName = self.getNodeValue(data, "//clouds/@name");
                 var pressureVal = self.getNodeValue(data, "//pressure/@value");
+                self.Pressure = pressureVal+" hpa";
                 var humidityVal = self.getNodeValue(data, "//humidity/@value");
+                self.Humidity = humidityVal+" %";
                 var getSunrise = new Date(self.getNodeValue(data, "//city/sun/@rise"));
                 var getSunset = new Date(self.getNodeValue(data, "//city/sun/@set"));
-                var sunrise = getSunrise.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
-                var sunset = getSunset.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
-                var coordlon = self.getNodeValue(data, "//city/coord/@lon");
-                var coordlat = self.getNodeValue(data, "//city/coord/@lat");
+                self.sunrise = getSunrise.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+                self.sunset = getSunset.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+                self.coordlon = self.getNodeValue(data, "//city/coord/@lon");
+                self.coordlat = self.getNodeValue(data, "//city/coord/@lat");
+                self.geoCoords = "["+self.coordlon+", "+self.coordlat+"]";
             }else{
                 var cityName = data.name;
                 var country = data.sys.country;
-                var temperature = Math.round(data.main.temp);
-                var icon = data.weather[0].icon;
-                var getCityDes = data.weather[0].id;
+                self.cityInfo = cityName+", "+country;
+                self.temperature = Math.round(data.main.temp);
+                self.icon = data.weather[0].icon;
+                self.getCityDes = data.weather[0].id;
                 var cityDes;
-                switch(getCityDes.toString().slice(0,1)){
+                switch(self.getCityDes.toString().slice(0,1)){
                     case "2": cityDes="Thunderstorm"; break;
                     case "3": cityDes="Drizzle"; break;
                     case "5": cityDes="Rain"; break;
                     case "6": cityDes="Snow"; break;
                     case "8": 
-                        getCityDes=="800" ? cityDes="Clear":cityDes="Clouds";
+                        self.getCityDes=="800" ? cityDes="Clear":cityDes="Clouds";
                         break;
                     default:
                         var getCityDesVal=data.weather[0].description;
@@ -152,69 +164,26 @@
                         cityDes=firstChar+getCityDesVal.slice(1,strlen);
                         break;
                 }
+                self.cityDesInfo = cityDes;
                 var speedName = "---";
                 var speedVal = data.wind.speed;
+                self.windVal = speedName+" "+speedVal;
                 var directionName = "---";
                 var directionVal = data.wind.deg;
-                var cloudsName = "---";
+                self.windDirection = directionName+" ("+directionVal+" )";
+                self.cloudsName = "---";
                 var pressureVal = data.main.pressure;
+                self.Pressure = pressureVal+" hpa";
                 var humidityVal = data.main.humidity;
+                self.Humidity = humidityVal+" %";
                 var getSunrise = new Date((data.sys.sunrise)*1000);
                 var getSunset = new Date((data.sys.sunset)*1000);
-                var sunrise = getSunrise.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
-                var sunset = getSunset.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
-                var coordlon = data.coord.lon;
-                var coordlat = data.coord.lat;
-            }
-        /*
-        	var html;
-        	html = '<h3>'+cityName+', '+country+'</h3>'+
-                '<h2> <img src="images/'+icon+'.png"> '+temperature+' °C</h2>'+
-                cityDes+
-                '<p>'+
-                '<span id="date_m">get at '+
-                c.getFullYear()+'.'+
-                (((c.getMonth()+1)<10)?("0"+(c.getMonth()+1)):(c.getMonth()+1))+'.'+
-                ((c.getDate()<10)?("0"+c.getDate()):c.getDate())+' '+
-                ((c.getHours()<10)?("0"+c.getHours()):c.getHours())+":"+
-                ((c.getMinutes()<10)?("0"+c.getMinutes()):c.getMinutes())+'</span>'+
-                '(<a type="button" style="color: #D26C22;" href="#">Wrong data?</a>)'+
-                '</p>'+
-                '<table class="table table-striped table-bordered table-condensed">'+
-                '<tbody>'+
-                '<tr>'+
-                '<td>Wind</td>'+
-                '<td>'+speedName+' '+speedVal+' m/s <br>'+
-                directionName+' ('+directionVal+' )</td>'+
-                '</tr>'+
-                '<tr>'+
-                '<td>Cloudiness</td>'+
-                '<td>'+cloudsName+'</td>'+
-                '</tr>'+
-                '<tr>'+
-                '<td>Pressure<br></td>'+
-                '<td>'+pressureVal+' hpa</td>'+
-                '</tr>'+
-                '<tr>'+
-                '<td>Humidity</td>'+
-                '<td>'+humidityVal+' %</td>'+
-                '</tr>'+
-                '<tr>'+
-                '<td>Sunrise</td>'+
-                '<td id="sunrise">'+sunrise+'</td>'+
-                '</tr>'+
-                '<tr>'+
-                '<td>Sunset</td>'+
-                '<td id="sunset">'+sunset+'</td>'+
-                '</tr>'+
-                '<tr>'+
-                '<td>Geo coords</td>'+
-                '<td id="coord"><a href="http://openweathermap.org/Maps?zoom=12&amp;lat='+coordlat+'&amp;lon='+coordlon+'&amp;layers=B0FTTFF">[ '+coordlon+', '+coordlat+' ]</a></td>'+
-                '</tr>'+
-                '</tbody>'+
-                '</table>';
-        	self.cityData = html;  
-            */    	
+                self.sunrise = getSunrise.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+                self.sunset = getSunset.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+                self.coordlon = data.coord.lon;
+                self.coordlat = data.coord.lat;
+                self.geoCoords = "["+self.coordlon+", "+self.coordlat+"]";
+            }            	
     	};
 
 	}]);
