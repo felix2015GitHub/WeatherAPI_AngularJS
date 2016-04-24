@@ -64,9 +64,6 @@
                 	</tr>
                 </tbody>
             </table>
-			<!--
-			<div ng-bind-html="tab.cityData"></div>
-			-->
 		</div>
 		<div id="content_next" ng-show="tab.tabPool.days">
 			<div class="select">
@@ -76,7 +73,19 @@
 					<option value="16">16 days</option>
 				</select>
 				<h3>Next days</h3>
-				<div ng-bind-html="tab.daysData"></div>
+				<div>
+					<table class="table">
+						<tbody>
+							<tr ng-repeat="days in tab.showDaysPool">
+								<td><span ng-bind="days.date"></span><img src="images/{{days.icon}}.png"></td>
+								<td>
+									<span class="label label-warning" ng-bind="days.tempMax"></span>&nbsp;
+									<span class="label label-default" ng-bind="days.tempMin"></span> &nbsp;&nbsp;
+									<i ng-bind="days.des"></i> <p><span ng-bind="days.speed"></span><br><span ng-bind="days.clous"></span></p></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>

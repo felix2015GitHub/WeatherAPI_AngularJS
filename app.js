@@ -15,6 +15,7 @@
 		self.cityData = '';
 		self.daysData = '';
         self.tabPool = {city: false, days:true};
+        self.showDaysPool = [];
 
 		getCurrentCityData(apiURLcity);
 		getNextDaysData(apiURLdays);
@@ -51,9 +52,6 @@
     	};
 
 		self.showNextDays = function(data){
-	        var html="";
-	        html += '<table class="table">';
-	        html += '<tbody>';
 	        for(var i=0;i<currentDays;i++){
 	            if(defaultType=="xml"){
 	                var getDay = self.getNodeValue(data, "//forecast/time["+(i+1)+"]/@day");
@@ -78,15 +76,10 @@
 	                var cloudsAll = data.list[i].clouds;
 	                var pressure = data.list[i].pressure;
 	            }
-	            html += '<tr>';
-	            html += '<td>'+day+' '+mon+' <img src="images/'+icon+'.png"></td>';
-	            html += '<td><span class="label label-warning">'+temperatureMax+'°C </span>&nbsp;';
-	            html += '<span class="label label-default">'+temperatureMin+'°C </span> &nbsp;&nbsp;';
-	            html += '<i>'+weatherDes+'</i> <p> '+speed+'m/s <br>clouds: '+cloudsAll+'%, '+pressure+' hpa</p></td>';
-	            html += '</tr>';
+                self.showDaysPool.push(
+                    {date:day+" "+mon, icon:icon, tempMax:temperatureMax+"°C", tempMin:temperatureMin+"°C", des:weatherDes, speed:speed+"m/s", clous:"clouds: "+cloudsAll+"%, "+pressure+" hpa"}
+                );
 	        }
-	        html += '</tbody></table>';
-	        self.daysData = html;
 		};
 
     	self.showCurrentCity = function(data){
