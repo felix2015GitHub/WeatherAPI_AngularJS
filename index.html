@@ -14,16 +14,13 @@
 	</div>
 	<div class="typeSelect">
 		<span>Type : </span>
-		<input type="radio" name="typeSel" value="xml"></input><span>XML</span>
-		<input type="radio" name="typeSel" value="json"></input><span>JSON</span>
+		<input type="radio" name="typeSel" value="xml" ng-model="tab.selectType" ng-click="tab.typeSel('xml')"></input><span>XML</span>
+		<input type="radio" name="typeSel" value="json" ng-model="tab.selectType" ng-click="tab.typeSel('json')"></input><span>JSON</span>
 	</div>
 	<div class="content_block">
 		<div id="content_city" ng-show="tab.tabPool.city">
 			<div class="select">
-				<select id="changeCity">
-					<option value="Taipei">Taipei</option>
-					<option value="NewYork">New York</option>
-					<option value="London">London</option>
+				<select id="changeCity" ng-model="tab.selectCity" ng-options="data for data in tab.cityPool" ng-change="tab.cityChange()">
 				</select>
 			</div>
 			<h3 ng-bind="tab.cityInfo"></h3>
@@ -67,10 +64,7 @@
 		</div>
 		<div id="content_next" ng-show="tab.tabPool.days">
 			<div class="select">
-				<select id="changeDays">
-					<option value="5">5 days</option>
-					<option value="7">7 days</option>
-					<option value="16">16 days</option>
+				<select id="changeDays" ng-model="tab.selectDays" ng-options="data for data in tab.daysPool" ng-change="tab.daysChange()">
 				</select>
 				<h3>Next days</h3>
 				<div>

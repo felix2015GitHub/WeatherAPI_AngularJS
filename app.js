@@ -5,29 +5,49 @@
 	app.controller('TabController', ['$http', function($http){
 		var currentCity = 'London',
 			currentDays = 7,
-			defaultType = 'json',
+			defaultType = 'xml',
             selectPage = 'days',
 			month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-		var apiURLcity = "http://api.openweathermap.org/data/2.5/weather?q="+currentCity+"&mode="+defaultType+"&units=metric&appid=8b5e25806eda1463bbfb1ce83b50c4e9";
-		var apiURLdays = "http://api.openweathermap.org/data/2.5/forecast/daily?q="+currentCity+"&mode="+defaultType+"&units=metric&cnt="+currentDays+"&appid=8b5e25806eda1463bbfb1ce83b50c4e9";
 		var self = this;
 		self.cityData = '';
 		self.daysData = '';
         self.tabPool = {city: false, days:true};
         self.showDaysPool = [];
+        self.selectType = "xml";
+        self.selectCity = "London";
+        self.cityPool = ["Taipei", "NewYork", "London"];
+        self.selectDays = 7;
+        self.daysPool = [5, 7, 16];
 
-		getCurrentCityData(apiURLcity);
-		getNextDaysData(apiURLdays);
+		getCurrentCityData();
+		getNextDaysData();
+
+        self.typeSel = function(type){
+            defaultType = type;
+            getCurrentCityData();
+            getNextDaysData();
+        };
+
+        self.daysChange = function(){
+            currentDays = self.selectDays;
+            getNextDaysData();
+        };
+
+        self.cityChange = function(){
+            currentCity = self.selectCity;
+            getCurrentCityData();
+        };
 
         self.showPage = function(id){
             self.tabPool[selectPage] = false;
             self.tabPool[id] = true;
             selectPage = id;
-        }
+        };
 
-		function getCurrentCityData(url){
-            $http.get(url).then(function(response){
+		function getCurrentCityData(){
+            var apiURLcity = "http://api.openweathermap.org/data/2.5/weather?q="+currentCity+"&mode="+defaultType+"&units=metric&appid=8b5e25806eda1463bbfb1ce83b50c4e9";
+            $http.get(apiURLcity).then(function(response){
                 if(defaultType=="xml"){
                     self.showCurrentCity($.parseXML(response.data));
                 }else{
@@ -37,7 +57,8 @@
 	    };
 
 	    function getNextDaysData(url){
-            $http.get(url).then(function(response){
+            var apiURLdays = "http://api.openweathermap.org/data/2.5/forecast/daily?q="+currentCity+"&mode="+defaultType+"&units=metric&cnt="+currentDays+"&appid=8b5e25806eda1463bbfb1ce83b50c4e9";
+            $http.get(apiURLdays).then(function(response){
                 if(defaultType=="xml"){
                     self.showNextDays($.parseXML(response.data));
                 }else{
@@ -52,6 +73,7 @@
     	};
 
 		self.showNextDays = function(data){
+            self.showDaysPool = [];
 	        for(var i=0;i<currentDays;i++){
 	            if(defaultType=="xml"){
 	                var getDay = self.getNodeValue(data, "//forecast/time["+(i+1)+"]/@day");
@@ -138,7 +160,7 @@
                 var cityName = data.name;
                 var country = data.sys.country;
                 self.cityInfo = cityName+", "+country;
-                self.temperature = Math.round(data.main.temp);
+                self.temperature = Math.round(data.main.temp)+"  °C";
                 self.icon = data.weather[0].icon;
                 self.getCityDes = data.weather[0].id;
                 var cityDes;
