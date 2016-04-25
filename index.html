@@ -21,7 +21,7 @@
 		<div id="content_city" ng-show="tab.tabPool.city">
 			<div class="select">
 				<select id="changeCity" ng-model="tab.selectCity" ng-options="data for data in tab.cityPool" ng-change="tab.cityChange()">
-				</select>
+				</select>				
 			</div>
 			<h3 ng-bind="tab.cityInfo"></h3>
             <h2> <img src="images/{{tab.icon}}.png"><span ng-bind="tab.temperature"></span></h2><span ng-bind="tab.cityDesInfo"></span>
@@ -66,6 +66,7 @@
 			<div class="select">
 				<select id="changeDays" ng-model="tab.selectDays" ng-options="data for data in tab.daysPool" ng-change="tab.daysChange()">
 				</select>
+				<span>days</span>
 				<h3>Next days</h3>
 				<div>
 					<table class="table">
