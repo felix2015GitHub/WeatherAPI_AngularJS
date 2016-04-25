@@ -1,30 +1,34 @@
 (function(){
 
+    var currentCity = 'London',
+        currentDays = 7,
+        defaultType = 'xml',
+        selectPage = 'days',
+        month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 	var app = angular.module('weather', ['ngSanitize']);
 
 	app.controller('TabController', ['$http', function($http){
-		var currentCity = 'London',
-			currentDays = 7,
-			defaultType = 'xml',
-            selectPage = 'days',
-			month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 
 		var self = this;
 		self.cityData = '';
 		self.daysData = '';
         self.tabPool = {city: false, days:true};
         self.showDaysPool = [];
-        self.selectType = "xml";
-        self.selectCity = "London";
+        self.selectType = defaultType;
+        self.selectCity = currentCity;
         self.cityPool = ["Taipei", "NewYork", "London"];
-        self.selectDays = 7;
+        self.selectDays = currentDays;
         self.daysPool = [5, 7, 16];
 
 		getCurrentCityData();
 		getNextDaysData();
 
-        self.typeSel = function(type){
-            defaultType = type;
+        self.typeSel = function(){
+            //console.log(self.selectType);
+            //defaultType = type;
+            defaultType = self.selectType;
             getCurrentCityData();
             getNextDaysData();
         };
