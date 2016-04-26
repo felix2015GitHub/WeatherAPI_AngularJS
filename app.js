@@ -4,12 +4,21 @@
         currentDays = 7,
         defaultType = 'xml',
         selectPage = 'days',
+        tabList = ["Current City", "Next Days"],
         month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-	var app = angular.module('weather', ['ngSanitize']);
+	var app = angular.module('weather', []);
+
+    app.directive('mypanel', function(){
+        return {
+            restrict: 'A',
+            transclude: true,
+            template: '<div class="tab"></div>',
+            scope: {}
+        };
+    });
 
 	app.controller('TabController', ['$http', function($http){
-
 
 		var self = this;
 		self.cityData = '';
@@ -26,8 +35,6 @@
 		getNextDaysData();
 
         self.typeSel = function(){
-            //console.log(self.selectType);
-            //defaultType = type;
             defaultType = self.selectType;
             getCurrentCityData();
             getNextDaysData();
