@@ -9,6 +9,7 @@
 <body>
 <div class="main" ng-controller="TabController as tab">
 	<div class="tabbar">
+		<!--<mypanel></mypanel>-->
 		<div ng-click="tab.showPage('city')" ng-model="tab.tabPool.city" class="tab" ng-class="{tab_selected: tab.tabPool.city}">Current City</div>
 		<div ng-click="tab.showPage('days')" ng-model="tab.tabPool.days" class="tab" ng-class="{tab_selected: tab.tabPool.days}">Next Days</div>
 	</div>
@@ -87,7 +88,6 @@
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-sanitize.js"></script>
 <script type="text/javascript" src="app.js"></script>
 </body>
 </html>
