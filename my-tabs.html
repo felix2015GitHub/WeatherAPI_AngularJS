@@ -1,0 +1,12 @@
+<div class="main" ng-controller="TabController as tab">
+	<div class="tabbar">
+    	<div ng-repeat="p in panes" class="tab" ng-bind="p.title" ng-class="{tab_selected: p.selected}" ng-click="select(p)"></div>
+    </div>
+    <div class="typeSelect">
+		<span>Type : </span>
+		<span ng-repeat="r in tab.typeList">
+			<input type="radio" name="typeSel" value="{{r.val}}" ng-model="tab.selectType" ng-click="tab.typeSel()"></input><span ng-bind="r.text"></span>
+		</span>
+	</div>
+  	<div class="tab-content" ng-transclude></div>
+</div>

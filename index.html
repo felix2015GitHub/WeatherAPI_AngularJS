@@ -1,25 +1,15 @@
 <!DOCTYPE html>
-<html ng-app="weather">
+<html>
 <head>
 	<title>Weather API example use AngularJS</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="weather.css">
 </head>
-<body>
-<div class="main" ng-controller="TabController as tab">
-	<div class="tabbar">
-		<!--<mypanel></mypanel>-->
-		<div ng-click="tab.showPage('city')" ng-model="tab.tabPool.city" class="tab" ng-class="{tab_selected: tab.tabPool.city}">Current City</div>
-		<div ng-click="tab.showPage('days')" ng-model="tab.tabPool.days" class="tab" ng-class="{tab_selected: tab.tabPool.days}">Next Days</div>
-	</div>
-	<div class="typeSelect">
-		<span>Type : </span>
-		<input type="radio" name="typeSel" value="xml" ng-model="tab.selectType" ng-click="tab.typeSel()"></input><span>XML</span>
-		<input type="radio" name="typeSel" value="json" ng-model="tab.selectType" ng-click="tab.typeSel()"></input><span>JSON</span>
-	</div>
-	<div class="content_block">
-		<div id="content_city" ng-show="tab.tabPool.city">
+<body ng-app="weather">
+<my-tabs>
+	<my-pane title="Current City">
+		<div id="content_city" class="content_block"  ng-controller="TabController as tab">
 			<div class="select">
 				<select id="changeCity" ng-model="tab.selectCity" ng-options="data for data in tab.cityPool" ng-change="tab.cityChange()">
 				</select>				
@@ -63,7 +53,9 @@
                 </tbody>
             </table>
 		</div>
-		<div id="content_next" ng-show="tab.tabPool.days">
+	</my-pane>
+	<my-pane title="Next Days">
+		<div id="content_next" class="content_block"  ng-controller="TabController as tab">
 			<div class="select">
 				<select id="changeDays" ng-model="tab.selectDays" ng-options="data for data in tab.daysPool" ng-change="tab.daysChange()">
 				</select>
@@ -84,8 +76,8 @@
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
+	</my-pane>
+</my-tabs>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
 <script type="text/javascript" src="app.js"></script>

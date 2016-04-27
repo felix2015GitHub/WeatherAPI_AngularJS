@@ -4,17 +4,55 @@
         currentDays = 7,
         defaultType = 'xml',
         selectPage = 'days',
-        tabList = ["Current City", "Next Days"],
         month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 	var app = angular.module('weather', []);
 
-    app.directive('mypanel', function(){
+    app.directive('myTabs', function(){
         return {
-            restrict: 'A',
+            restrict: 'E',
             transclude: true,
-            template: '<div class="tab"></div>',
-            scope: {}
+            scope: {},
+            controller: ['$scope', function($scope) {
+                var panes = $scope.panes = [];
+
+                $scope.select = function(pane) {
+                    angular.forEach(panes, function(pane) {
+                        pane.selected = false;
+                    });
+                    pane.selected = true;
+                };
+
+                this.addPane = function(pane) {
+                    if (panes.length === 0) {
+                        $scope.select(pane);
+                    }
+                    panes.push(pane);
+                    angular.forEach(panes, function(pane) {
+                        if(pane.title=="Next Days"){
+                            pane.selected = true;
+                        }else{
+                            pane.selected = false;
+                        }
+                    });
+                };
+            }],
+            templateUrl: 'my-tabs.html'
+        };
+    });
+
+    app.directive('myPane', function() {
+        return {
+            require: '^^myTabs',
+            restrict: 'E',
+            transclude: true,
+            scope: {
+                title: '@'
+            },
+            link: function(scope, element, attrs, tabsCtrl) {
+                tabsCtrl.addPane(scope);
+            },
+            templateUrl: 'my-pane.html'
         };
     });
 
@@ -30,6 +68,16 @@
         self.cityPool = ["Taipei", "NewYork", "London"];
         self.selectDays = currentDays;
         self.daysPool = [5, 7, 16];
+
+        self.tabList = [
+            {name: "Current City", select: false, tag:"city"},
+            {name: "Next Days", select: true, tag:"days"}
+        ];
+
+        self.typeList = [
+            {val: "xml", text: "XML"},
+            {val: "json", text: "JSON"}
+        ];
 
 		getCurrentCityData();
 		getNextDaysData();
