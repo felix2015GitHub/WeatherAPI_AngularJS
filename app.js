@@ -96,6 +96,7 @@
         self.cityChange = function(){
             currentCity = self.selectCity;
             getCurrentCityData();
+            getNextDaysData();
         };
 
         self.showPage = function(id){
