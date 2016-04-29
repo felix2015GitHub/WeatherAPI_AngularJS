@@ -6,16 +6,22 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="weather.css">
 </head>
-<body ng-app="weather">
+<body ng-app="weather" ng-controller="TabController as tab">
 <my-tabs>
 	<my-pane title="Current City">
-		<div id="content_city" class="content_block"  ng-controller="TabController as tab">
+        <div class="typeSelect">
+            <span>Type : </span>
+            <span ng-repeat="r in tab.typeList">
+                <input type="radio" name="typeSel" value="{{r.val}}" ng-model="tab.selectType" ng-click="tab.typeSel()"></input><span ng-bind="r.text"></span>
+            </span>
+        </div>
+		<div id="content_city" class="content_block">
 			<div class="select">
 				<select id="changeCity" ng-model="tab.selectCity" ng-options="data for data in tab.cityPool" ng-change="tab.cityChange()">
 				</select>				
 			</div>
 			<h3 ng-bind="tab.cityInfo"></h3>
-            <h2> <img src="images/{{tab.icon}}.png"><span ng-bind="tab.temperature"></span></h2><span ng-bind="tab.cityDesInfo"></span>
+            <h2> <img ng-src="images/{{tab.icon}}.png"><span ng-bind="tab.temperature"></span></h2><span ng-bind="tab.cityDesInfo"></span>
             <p>
             	<span ng-bind="tab.date_m"></span>
             	(<a type="button" style="color: #D26C22;" href="#">Wrong data?</a>)
@@ -55,7 +61,7 @@
 		</div>
 	</my-pane>
 	<my-pane title="Next Days">
-		<div id="content_next" class="content_block"  ng-controller="TabController as tab">
+		<div id="content_next" class="content_block">
 			<div class="select">
 				<select id="changeDays" ng-model="tab.selectDays" ng-options="data for data in tab.daysPool" ng-change="tab.daysChange()">
 				</select>
@@ -65,7 +71,7 @@
 					<table class="table">
 						<tbody>
 							<tr ng-repeat="days in tab.showDaysPool">
-								<td><span ng-bind="days.date"></span><img src="images/{{days.icon}}.png"></td>
+								<td><span ng-bind="days.date"></span><img ng-src="images/{{days.icon}}.png"></td>
 								<td>
 									<span class="label label-warning" ng-bind="days.tempMax"></span>&nbsp;
 									<span class="label label-default" ng-bind="days.tempMin"></span> &nbsp;&nbsp;
