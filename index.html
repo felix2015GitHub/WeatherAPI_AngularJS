@@ -9,52 +9,46 @@
 <body ng-app="weather" ng-controller="TabController as tab">
 <my-tabs>
 	<my-pane title="Current City">
-        <div class="typeSelect">
-            <span>Type : </span>
-            <span ng-repeat="r in tab.typeList">
-                <input type="radio" name="typeSel" value="{{r.val}}" ng-model="tab.selectType" ng-click="tab.typeSel()"></input><span ng-bind="r.text"></span>
-            </span>
-        </div>
 		<div id="content_city" class="content_block">
 			<div class="select">
 				<select id="changeCity" ng-model="tab.selectCity" ng-options="data for data in tab.cityPool" ng-change="tab.cityChange()">
 				</select>				
 			</div>
-			<h3 ng-bind="tab.cityInfo"></h3>
-            <h2> <img ng-src="images/{{tab.icon}}.png"><span ng-bind="tab.temperature"></span></h2><span ng-bind="tab.cityDesInfo"></span>
+			<h3>{{tab.cityInfo.city._name}}, {{tab.cityInfo.city.country}}</h3>
+            <h2> <img ng-src="images/{{tab.cityInfo.weather._icon}}.png"><span>{{tab.cityInfo.temperature._value | number:1}}</span></h2><span>{{tab.cityInfo.weather._value}}</span>
             <p>
-            	<span ng-bind="tab.date_m"></span>
+            	<span>get on {{tab.time | date:'yyyy.MM.dd HH:mm'}}</span>
             	(<a type="button" style="color: #D26C22;" href="#">Wrong data?</a>)
             </p>
             <table class="table table-striped table-bordered table-condensed">
             	<tbody>
             		<tr>
             			<td>Wind</td>
-            			<td><span ng-bind="tab.windVal"></span> m/s <br><span ng-bind="tab.windDirection"></span></td>
+            			<td><span>{{tab.cityInfo.wind.speed._name}} {{tab.cityInfo.wind.speed._value}} m/s</span><br><span>{{tab.cityInfo.wind.direction._name}} ({{tab.cityInfo.wind.direction._value}})</span></td>
             		</tr>
                 	<tr>
                 		<td>Cloudiness</td>
-                		<td><span ng-bind="tab.cloudsName"></span></td>
+                		<td><span>{{tab.cityInfo.clouds._name}}</span></td>
                 	</tr>
                 	<tr>
                 		<td>Pressure<br></td>
-                		<td><span ng-bind="tab.Pressure"></span></td>
+                		<td><span>{{tab.cityInfo.pressure._value}} {{tab.cityInfo.pressure._unit | lowercase}}</span></td>
                 	</tr>
                 	<tr>
                 		<td>Humidity</td>
-                		<td><span ng-bind="tab.Humidity"></span></td>
+                		<td><span>{{tab.cityInfo.humidity._value}} {{tab.cityInfo.humidity._unit}}</span></td>
                 	</tr>
                 	<tr>
                 		<td>Sunrise</td>
-                		<td><span ng-bind="tab.sunrise"></span></td>
+                		<td><span>{{tab.cityInfo.city.sun._rise | date:'HH:mm'}}</span></td>
                 	</tr>
                 	<tr>
                 		<td>Sunset</td>
-                		<td><span ng-bind="tab.sunset"></span></td>
+                		<td><span>{{tab.cityInfo.city.sun._set | date:'HH:mm'}}</span></td>
                 	</tr>
                 	<tr>
                 		<td>Geo coords</td>
-                		<td><a href="http://openweathermap.org/Maps?zoom=12&amp;lat={{tab.coordlat}}&amp;lon={{tab.coordlon}}&amp;layers=B0FTTFF"><span ng-bind="tab.geoCoords"></span></a></td>
+                		<td><a href="http://openweathermap.org/Maps?zoom=12&amp;lat={{tab.cityInfo.city.coord._lat}}&amp;lon={{tab.cityInfo.city.coord._lon}}&amp;layers=B0FTTFF"><span>[{{tab.cityInfo.city.coord._lon}}, {{tab.cityInfo.city.coord._lat}}]</span></a></td>
                 	</tr>
                 </tbody>
             </table>
@@ -70,12 +64,12 @@
 				<div>
 					<table class="table">
 						<tbody>
-							<tr ng-repeat="days in tab.showDaysPool">
-								<td><span ng-bind="days.date"></span><img ng-src="images/{{days.icon}}.png"></td>
+							<tr ng-repeat="days in tab.nextDaysInfo">
+								<td><span ng-bind="days._day | date:'dd MMM'"></span><img ng-src="images/{{days.symbol._var}}.png"></td>
 								<td>
-									<span class="label label-warning" ng-bind="days.tempMax"></span>&nbsp;
-									<span class="label label-default" ng-bind="days.tempMin"></span> &nbsp;&nbsp;
-									<i ng-bind="days.des"></i> <p><span ng-bind="days.speed"></span><br><span ng-bind="days.clous"></span></p></td>
+									<span class="label label-warning">{{days.temperature._max | number:0}}°C</span>&nbsp;
+									<span class="label label-default">{{days.temperature._min | number:0}}°C</span> &nbsp;&nbsp;
+									<i ng-bind="days.symbol._name"></i> <p><span>{{days.windSpeed._mps}}m/s</span><br><span>clouds: {{days.clouds._all}}%, {{days.pressure._value}} hpa</span></p></td>
 							</tr>
 						</tbody>
 					</table>
@@ -86,6 +80,7 @@
 </my-tabs>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/x2js/1.2.0/xml2json.min.js"></script>
 <script type="text/javascript" src="app.js"></script>
 </body>
 </html>
