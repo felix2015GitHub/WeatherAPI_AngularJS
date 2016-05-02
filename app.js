@@ -91,13 +91,7 @@
             getCurrentCityData();
             getNextDaysData();
         };
-/*
-        self.showPage = function(id){
-            self.tabPool[selectPage] = false;
-            self.tabPool[id] = true;
-            selectPage = id;
-        };
-*/
+
 		function getCurrentCityData(){
             var apiURLcity = "http://api.openweathermap.org/data/2.5/weather?q="+currentCity+"&mode=xml&units=metric&appid=8b5e25806eda1463bbfb1ce83b50c4e9";
             $http.get(apiURLcity).then(function(response){              
@@ -115,12 +109,7 @@
                 self.nextDaysInfo = getData.weatherdata.forecast.time;
             });
 	    };
-/*
-		self.getNodeValue = function(data, xpath){
-        	var nodes = data.evaluate(xpath, data, null, XPathResult.ANY_TYPE, null);
-        	return nodes.iterateNext().nodeValue;
-    	};
-*/
+
 	}]);
 
 })();
