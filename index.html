@@ -15,7 +15,7 @@
 				</select>				
 			</div>
 			<h3>{{tab.cityInfo.city._name}}, {{tab.cityInfo.city.country}}</h3>
-            <h2> <img ng-src="images/{{tab.cityInfo.weather._icon}}.png"><span>{{tab.cityInfo.temperature._value | number:1}}</span></h2><span>{{tab.cityInfo.weather._value}}</span>
+            <h2> <img ng-src="images/{{tab.cityInfo.weather._icon}}.png"><span>{{tab.cityInfo.temperature._value | number:1}} °C</span></h2><span>{{tab.cityInfo.weather._value}}</span>
             <p>
             	<span>get on {{tab.time | date:'yyyy.MM.dd HH:mm'}}</span>
             	(<a type="button" style="color: #D26C22;" href="#">Wrong data?</a>)
