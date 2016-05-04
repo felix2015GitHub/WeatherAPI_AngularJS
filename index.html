@@ -8,7 +8,7 @@
 </head>
 <body ng-app="weather" ng-controller="TabController as tab">
 <my-tabs>
-	<my-pane title="Current City">
+	<my-pane title="Current City" attr="hide">
 		<div id="content_city" class="content_block">
 			<div class="select">
 				<select id="changeCity" ng-model="tab.selectCity" ng-options="data for data in tab.cityPool" ng-change="tab.cityChange()">
@@ -54,7 +54,7 @@
             </table>
 		</div>
 	</my-pane>
-	<my-pane title="Next Days">
+	<my-pane title="Next Days" attr="show">
 		<div id="content_next" class="content_block">
 			<div class="select">
 				<select id="changeDays" ng-model="tab.selectDays" ng-options="data for data in tab.daysPool" ng-change="tab.daysChange()">
